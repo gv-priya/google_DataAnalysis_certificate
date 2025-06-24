@@ -6,7 +6,8 @@ library(tidyverse)
 library(tidyr)
 library(hms)
 library(vctrs)
-X202504_divvy_tripdata <- read_csv("202504-divvy-tripdata.csv")
+#choosing file "202504-divvy-tripdata.csv"
+X202504_divvy_tripdata <- read.csv(file.choose())
 view(X202504_divvy_tripdata)
 cyclistic_April2025_df <- data.frame(X202504_divvy_tripdata)
 view(cyclistic_April2025_df)
@@ -65,29 +66,27 @@ write_excel_csv(new_April2025_datetime, "April2025_cyclistic2025",delim = ",", n
 #Analysis
 ##Weekdays for the starting date
 weekday_casual <- casuallist_April2025 %>% mutate(weekday = wday(as.Date(casuallist_April2025$Started_at), label = TRUE, abbr = TRUE))
+weekday_casual <- data.frame(weekday_casual)
 view(weekday_casual)
 ## Number of bike rentals for each day of the week and number of electric bikes and classic bikes. 
-rental_byweekday_biketype <- weekday_casual%>% group_by(weekday, Rideable_type)%>%summarise(count = n())
-view(rental_byweekday_biketype)
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday = weekday_casual$weekday, Rideable_type = weekday_casual$Rideable_type)%>%summarise(count = n())
+class(rental_byweekday_biketype)
 ##total rentals categorized by type of bike for each day in April for casuals
 rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
 print(rental_byweekday_biketype_casuals_T)
+
 ##total rental by week day
 rental_byday <-weekday_casual%>%group_by(weekday)%>%summarise(Total = n())
 view(rental_byday)
 ##Weekdays for the members_list starting date
 weekday_members <- memberlist_April2025 %>% mutate(weekday = wday(as.Date(memberlist_April2025$Started_at), label = TRUE, abbr = TRUE))
 view(weekday_members)
-##Members list - number of bike rentals in weekdays and weekends. added Rideable_type to count the number of electric and classic bikes
-rental_byweekday_biketype_members <- weekday_members%>% group_by(weekday, Rideable_type)%>%summarise(count = n())%>% summarise_at(group_by(weekday_members$weekday)%>%summarise(total = n()))
-view(rental_byweekday_biketype_members)
+
 ##total_rental by week day for members
 rental_byday_members <- weekday_members %>% group_by(weekday)%>%summarise(total = n())
 view(rental_byday_members)
 class(rental_byday_members)
-## creating the totals column into 
-rental_byweekday_biketype_member_T <- rental_byweekday_biketype_members%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
-print(rental_byweekday_biketype_member_T)
+
 ##-------------------------------------------------------------------------------------------------------##
 ## plotting the rental_byweekday for casuals and rental_byweekday_members
 

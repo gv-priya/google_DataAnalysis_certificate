@@ -1,0 +1,503 @@
+view(member_list_feb2025)
+view(merged_df)
+### prints TRUE in console. Comparing if 2 columns are the same for weekdays. this means the bikes were used within 1day. bikes were returned the same day.
+result <- merged_df$starting_weekday %in% merged_df$ending_weekday
+print(result)
+#total number of unique bicycles:
+n_distinct(merged_df$ride_id)  #151880 num of ride_id
+n_distinct(merged_df$rideable_type) # 2 types of bikes
+n_distinct(merged_df$start_station_id) #1082 unique starting stations
+n_distinct(merged_df$end_station_id) #1063 unique end station id
+member_list_feb2025<-merged_df %>% filter(member_casual == 'member')
+view(member_list_feb2025)
+write_csv(member_list_feb2025, file = "members_list_feb2025.csv",na="NA", append =FALSE)
+casual_list_feb2025 <- merged_df %>% filter(member_casual == 'casual')
+view(casual_list_feb2025)
+write_csv(casual_list_feb2025, file = "casual_list_feb2025.csv",na="NA", append =FALSE)
+elapsed_time <- interval(ymd_hms(member_list_feb2025$started_at), ymd_hms(member_list_feb2025$ended_at))
+trip_duration<- as.duration(elapsed_time)
+T_D <- data.frame(trip_duration)
+view(T_D)
+member_list_feb2025 <- bind_cols(member_list_feb2025, trip_duration = T_D$trip_duration)
+view(member_list_feb2025)
+trip_duration_casuals <- as.duration( interval(ymd_hms(casual_list_feb2025$started_at), ymd_hms(casual_list_feb2025$ended_at)))
+T_D_casuals <- data.frame(trip_duration_casuals)
+view(T_D_casuals)
+casual_list_feb2025 <- bind_cols(casual_list_feb2025, trip_duration=T_D_casuals$trip_duration_casuals)
+view(casual_list_feb2025)
+member_list_feb2025 <- member_list_feb2025%>%separate( trip_duration, into= c("seconds", "minutes"), sep = "s \\(~", remove = TRUE) %>%
+mutate(seconds_elapsed = as.numeric(seconds), minutes_elapsed = as.numeric(gsub("minutes\\)", "", minutes))
+)
+view(member_list_feb2025)
+casual_list_feb2025 <- casual_list_feb2025 %>% separate( trip_duration, into= c("seconds", "minutes"), sep = "s \\(~", remove = TRUE) %>%
+mutate(seconds_elapsed = as.numeric(seconds), minutes_elapsed = as.numeric(gsub("minutes\\)", "", minutes))
+)
+view(casual_list_feb2025)
+view(member_list_feb2025)
+sorted_members<-sort.int(member_list_feb2025, decreasing = TRUE, na.last = NA)
+sorted_members<-sort.int(member_list_feb2025, decreasing = TRUE, na.last = NA, index.return = TRUE)
+to_sort_members <-member_list_feb2025
+to_sort_members <-member_list_feb2025
+to_sort_members<- dataframe[ with(to_sort_members,order(to_sort_members$seconds))]
+###sorting in ascending order
+to_sort_members <-member_list_feb2025
+tracemem(member_list_feb2025) == tracemem(to_sort_members)
+to_sort_members<- dataframe[ with(to_sort_members,order(to_sort_members$seconds))]
+to_sort_members <-data.frame(member_list_feb2025)
+to_sort_members<- dataframe[ with(to_sort_members,order(to_sort_members$seconds))]
+view(to_sort_members)
+to_sort_members<- data.frame[ with(to_sort_members,order(to_sort_members$seconds))]
+to_sort_members<-  with(to_sort_members,order(to_sort_members$seconds))
+view(to_sort_members)
+tracemem(member_list_feb2025) == tracemem(to_sort_members)
+view(member_list_feb2025)
+rental_by_weekdays <- member_list_feb2025 %>% mutate(weekday = wday(as.Date(member_list_feb2025$Started_at), label = TRUE, abbr = TRUE))
+view(rental_by_weekdays)
+rental_by_weekdays <- member_list_feb2025 %>% mutate(weekday = wday(as.Date(member_list_feb2025$Started_at), label = TRUE, abbr = TRUE))
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(readr, stringr)
+library(ggplot2)
+library(vroom)
+library("hms")
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(readr, stringr)
+library(ggplot2)
+library(vroom)
+library(hms)
+rental_by_weekdays <- member_list_feb2025 %>% mutate(weekday = wday(as.Date(member_list_feb2025$Started_at), label = TRUE, abbr = TRUE))
+member_list_feb2025_weekdays <- member_list_feb2025 %>% mutate(weekday = wday(as.Date(member_list_feb2025$Started_at), label = TRUE, abbr = TRUE))
+member_list_feb2025_weekdays <- member_list_feb2025 %>% mutate(weekday = wday(as.Date(member_list_feb2025$started_at), label = TRUE, abbr = TRUE))
+view(member_list_feb2025_weekdays )
+member_list_feb2025_weekdays <- member_list_feb2025 %>% mutate(starting_weekday = wday(as.Date(member_list_feb2025$started_at), label = TRUE, abbr = TRUE))
+view(member_list_feb2025_weekdays )
+casual_list_feb2025_endingweekday <- casual_list_feb2025 %>% mutate(ending_weekday = wday(as.Date(casual_list_feb2025$ended_at), label = TRUE, abbr = TRUE))
+view(casual_list_feb2025_endingweekday)
+member_list_feb2025_weekdays <- member_list_feb2025 %>% mutate(starting_weekday = wday(as.Date(member_list_feb2025$started_at), label = TRUE, abbr = TRUE)) %>% mutate(ending_weekday = wday(as.Date(member_list_feb2025$ended_at)), label = TRUE, abbr = TRUE)
+view(member_list_feb2025_weekdays )
+member_list_feb2025_weekdays <- member_list_feb2025 %>% mutate(starting_weekday = wday(as.Date(member_list_feb2025$started_at), label = TRUE, abbr = TRUE)) %>% mutate(ending_weekday = wday(as.Date(member_list_feb2025$ended_at), label = TRUE, abbr = TRUE))
+view(member_list_feb2025_weekdays )
+casual_list_feb2025_weekday <- casual_list_feb2025 %>% mutate(ending_weekday = wday(as.Date(casual_list_feb2025$ended_at), label = TRUE, abbr = TRUE)) %>% mutate(ending_weekday = wday(as.Date(casual_list_feb2025$ended_at), label = TRUE, abbr = TRUE))
+view(casual_list_feb2025_weekday)
+casual_list_feb2025_weekday <- casual_list_feb2025 %>% mutate(ending_weekday = wday(as.Date(casual_list_feb2025$started_at), label = TRUE, abbr = TRUE)) %>% mutate(ending_weekday = wday(as.Date(casual_list_feb2025$ended_at), label = TRUE, abbr = TRUE))
+view(casual_list_feb2025_weekday)
+casual_list_feb2025_weekday <- casual_list_feb2025 %>% mutate(Starting_weekday = wday(as.Date(casual_list_feb2025$started_at), label = TRUE, abbr = TRUE)) %>% mutate(ending_weekday = wday(as.Date(casual_list_feb2025$ended_at), label = TRUE, abbr = TRUE))
+view(casual_list_feb2025_weekday)
+view(member_list_feb2025_weekdays)
+weekday_counts <- member_list_feb2025_weekdays %>%
+group_by(starting_weekday) %>%
+summarise(count = n())
+view(weekday_counts)
+member_weekday_counts_feb2025 <- member_list_feb2025_weekdays %>%
+group_by(starting_weekday) %>%
+summarise(count = n())
+view(member_weekday_counts_feb_2025)
+member_weekday_counts_feb2025 <- member_list_feb2025_weekdays %>%
+group_by(starting_weekday) %>%
+summarise(count = n())
+view(member_weekday_counts_feb_2025)
+view(member_weekday_counts_feb2025)
+print(max(member_weekday_counts_feb2025))
+view(data.frame(member_weekday_counts_feb2025))
+feb2025_memberweekdaycounts<-data.frame(member_weekday_counts_feb2025)
+view(feb2025_memberweekdaycounts)
+view(max(feb2025_memberweekdaycounts))
+view(max(feb2025_memberweekdaycounts$counts))
+view(feb2025_memberweekdaycounts$counts)
+view(feb2025_memberweekdaycounts)
+view(max(feb2025_memberweekdaycounts$count))
+rental_byweekday_biketype_members <- feb2025_memberweekdaycounts%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+view(member_list_feb2025_weekdays)
+rental_byweekday_biketype_members <- member_list_feb2025_weekdays%>% pivot_wider(names_from =rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype_members <- feb2025_memberweekdaycounts%>% pivot_wider(names_from =rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype_members <- feb2025_memberweekdaycounts%>% pivot_wider(names_from =member_list_feb2025_weekdays$rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype <- member_list_feb2025_weekdays%>% group_by(weekday, Rideable_type)%>%summarise(count = n())
+rental_byweekday_biketype <- member_list_feb2025_weekdays%>% group_by(weekday, rideable_type)%>%summarise(count = n())
+rental_byweekday_biketype <- member_list_feb2025_weekdays%>% group_by(starting_weekday, rideable_type)%>%summarise(count = n())
+view(rental_byweekday_biketype)
+rental_byweekday_biketype_members <- rental_byweekday_biketype%>% pivot_wider(names_from =rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+print(rental_byweekday_biketype_members)
+print(rental_byweekday_biketype_members)
+view(rental_byweekday_biketype_members)
+view(casual_list_feb2025_weekday)
+casuals_weekday_counts_feb2025 <- casual_list_feb2025_weekday %>%
+group_by(Starting_weekday) %>%
+summarise(count = n())
+view(casuals_weekday_counts_feb2025)
+feb2025_casualsweekdaycounts<-data.frame(casuals_weekday_counts_feb2025)
+view(feb2025_casualsweekdaycounts)
+rental_byweekday_biketype_casual <- casual_list_feb2025_weekday%>% group_by(starting_weekday, rideable_type)%>%summarise(count = n())
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(readr, stringr)
+library(ggplot2)
+library(vroom)
+library(hms)
+View(Feb2025_cyclistic_tripdata)
+feb2025_df <- data.frame(Feb2025_cyclistic_tripdata)
+view(feb2025_df)
+view(feb2025_df_startdate)
+view(feb2025_df_enddate)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(readr, stringr)
+library(ggplot2)
+library(vroom)
+library(hms)
+view(feb2025_df)
+feb2025_df_startdate<-feb2025_df %>% select(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lng, start_lat, end_lng, end_lat, member_casual) %>% mutate(start_Month = month(date(feb2025_df$started_at))) %>% mutate(start_day = day(date(feb2025_df$started_at))) %>% mutate(start_year = year(date(feb2025_df$started_at)))
+feb2025_df_enddate<-feb2025_df %>% select(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lng, start_lat, end_lng, end_lat, member_casual) %>% mutate(end_Month = month(date(feb2025_df$ended_at))) %>% mutate(end_day = day(date(feb2025_df$ended_at))) %>% mutate(end_year = year(date(feb2025_df$ended_at)))
+view(feb2025_df_startdate)
+view(feb2025_df_enddate)
+start_datetime <- ymd_hms(feb2025_df$started_at)
+end_datetime<-ymd_hms(feb2025_df$ended_at)
+feb2025_df_timeofday <- feb2025_df %>%select(ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lng, start_lat, end_lng, end_lat, member_casual) %>% mutate(start_time = format(start_datetime, "%H:%M:%S")) %>% mutate(end_time = format(end_datetime, "%H:%M:%S")) %>% mutate(starttime_AM = am(start_datetime)) %>% mutate(end_time_pm = pm(end_datetime))
+view(feb2025_df_timeofday)
+df_list=list(feb2025_df_startdate,feb2025_df_enddate,feb2025_df_timeofday)
+merged_df <- merge(feb2025_df_startdate, merge(feb2025_df_enddate,feb2025_df_timeofday))
+view(merged_df)
+merged_df$starting_weekday <- weekdays(as.Date(merged_df$starting_date),  abbr = TRUE)
+member_list_feb2025<-merged_df %>% filter(member_casual == 'member')
+view(member_list_feb2025)
+casual_list_feb2025 <- merged_df %>% filter(member_casual == 'casual')
+view(casual_list_feb2025)
+elapsed_time <- interval(ymd_hms(member_list_feb2025$started_at), ymd_hms(member_list_feb2025$ended_at))
+trip_duration<- as.duration(elapsed_time)
+T_D <- data.frame(trip_duration)
+view(T_D)
+member_list_feb2025 <- bind_cols(member_list_feb2025, trip_duration = T_D$trip_duration)
+view(member_list_feb2025)
+trip_duration_casuals <- as.duration( interval(ymd_hms(casual_list_feb2025$started_at), ymd_hms(casual_list_feb2025$ended_at)))
+T_D_casuals <- data.frame(trip_duration_casuals)
+view(T_D_casuals)
+casual_list_feb2025 <- bind_cols(casual_list_feb2025, trip_duration=T_D_casuals$trip_duration_casuals)
+view(casual_list_feb2025)
+member_list_feb2025 <- member_list_feb2025%>%separate( trip_duration, into= c("seconds", "minutes"), sep = "s \\(~", remove = TRUE) %>%
+mutate(seconds_elapsed = as.numeric(seconds), minutes_elapsed = as.numeric(gsub("minutes\\)", "", minutes))
+)
+view(member_list_feb2025)
+casual_list_feb2025 <- casual_list_feb2025 %>% separate( trip_duration, into= c("seconds", "minutes"), sep = "s \\(~", remove = TRUE) %>%
+mutate(seconds_elapsed = as.numeric(seconds), minutes_elapsed = as.numeric(gsub("minutes\\)", "", minutes))
+)
+view(casual_list_feb2025)
+member_weekday_counts_feb2025 <- member_list_feb2025_weekdays %>%
+group_by(starting_weekday) %>%
+summarise(count = n())
+feb2025_memberweekdaycounts<-data.frame(member_weekday_counts_feb2025)
+view(feb2025_memberweekdaycounts)
+rental_byweekday_biketype <- member_list_feb2025_weekdays%>% group_by(starting_weekday, rideable_type)%>%summarise(count = n())
+view(rental_byweekday_biketype)
+rental_byweekday_biketype_members <- rental_byweekday_biketype%>% pivot_wider(names_from =rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+view(rental_byweekday_biketype_members)
+casuals_weekday_counts_feb2025 <- casual_list_feb2025_weekday %>%
+group_by(Starting_weekday) %>%
+summarise(count = n())
+view(casuals_weekday_counts_feb2025)
+feb2025_casualsweekdaycounts<-data.frame(casuals_weekday_counts_feb2025)
+view(feb2025_casualsweekdaycounts)
+##count number of bikerides for each weekday.
+rental_byweekday_biketype_casual <- casual_list_feb2025_weekday%>% group_by(starting_weekday, rideable_type)%>%summarise(count = n())
+view(casual_list_feb2025_weekday)
+rental_byweekday_biketype_casual <- casual_list_feb2025_weekday%>% group_by(Starting_weekday, rideable_type)%>%summarise(count = n())
+view(rental_byweekday_biketype_casual)
+## pivot wider for electric and classic bike
+rental_byweekday_biketype_casual_wider <- casual_list_feb2025_weekday%>% pivot_wider(names_from = rideable_type, values_from = count)%>% mutate(Total = classic_bike + electric_bike)
+## pivot wider for electric and classic bike
+rental_byweekday_biketype_casual_wider <- rental_byweekday_biketype_casual%>% pivot_wider(names_from = rideable_type, values_from = count)%>% mutate(Total = classic_bike + electric_bike)
+view(rental_byweekday_biketype_casual_wider)
+weekday_counts <- weekday_casual %>%
+group_by(weekday) %>%
+summarise(count = n())
+library(readr, stringr)
+library(lubridate)
+library(dplyr)
+library(vroom)
+library(tidyverse)
+library(hms)
+library(vctrs)
+X202503_divvy_tripdata <- read_csv("202503-divvy-tripdata.csv")
+new_march2025_start_date <-cyclistic_march2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+start_month = month(started_at),
+start_day = day(started_at),
+start_year = year(started_at),
+start_time_minutes = hour(started_at)*60+minute(started_at)+(second(started_at)/60)
+)
+cyclistic_march2025_df <- data.frame(X202503_divvy_tripdata)
+X202503_divvy_tripdata <- read_csv("202503-divvy-tripdata.csv")
+X202503_divvy_tripdata  <- read.csv(file.choose())
+view(X202503_divvy_tripdata)
+cyclistic_march2025_df <- data.frame(X202503_divvy_tripdata)
+view(cyclistic_march2025_df)
+table(is.na(cyclistic_march2025_df$started_at))
+table(grepl("^\\d{2}:\\d{2}:\\d{2}$", cyclistic_march2025_df$started_at))
+str(cyclistic_march2025_df$started_at)
+head(cyclistic_march2025_df$started_at)
+str(cyclistic_march2025_df$ended_at)
+head(cyclistic_march2025_df$ended_at)
+new_march2025_start_date <-cyclistic_march2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+start_month = month(started_at),
+start_day = day(started_at),
+start_year = year(started_at),
+start_time_minutes = hour(started_at)*60+minute(started_at)+(second(started_at)/60)
+)
+view(new_march2025_start_date)
+new_march2025_end_date <-cyclistic_march2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+end_month = month(ended_at),
+end_day = day(ended_at),
+end_year = year(ended_at),
+end_time = hour(ended_at)*60+minute(started_at)+(second(started_at)/60)
+)
+view(new_march2025_end_date)
+elapsed_time <- interval(ymd_hms(cyclistic_march2025_df$started_at), ymd_hms(cyclistic_march2025_df$ended_at))
+trip_duration<- as.duration(elapsed_time)
+T_D <- data.frame(trip_duration)
+#view elapsed time in dataframe
+class(T_D$trip_duration)
+view(T_D)
+#merge
+merge_df <- new_march2025_start_date|>inner_join(new_march2025_end_date, by = c("ride_id", "rideable_type", "started_at", "ended_at","start_station_name","start_station_id", "end_station_name", "end_station_id", "start_lat", "start_lng", "end_lat", "end_lng", "member_casual"))
+view(merge_df)
+new_march2025_datetime <-  bind_cols(merge_df, Trip_Duration = T_D$trip_duration)
+colnames(new_march2025_datetime)<-tools::toTitleCase(colnames(new_march2025_datetime))
+view(new_march2025_datetime)
+#separating the trip duration column into seconds and minutes
+new_march2025_datetime <- new_march2025_datetime%>%separate( Trip_Duration, into= c("seconds", "minutes"), sep = "s \\(~", remove = TRUE) %>%
+mutate(seconds = round(as.numeric(seconds)), minutes = as.numeric(gsub("minutes\\)", "", minutes))
+)
+view(new_march2025_datetime)
+memberlist_march2025 <- new_march2025_datetime %>% filter(Member_casual == "member")
+view(memberlist_march2025)
+casuallist_march2025 <- new_march2025_datetime %>% filter(Member_casual == "casual")
+view(casuallist_march2025)
+weekday_casual<- casuallist_march2025 %>% mutate(weekday = wday(as.Date(casuallist_march2025$Started_at), label = TRUE, abbr= TRUE))
+view(weekday_casual)
+## filter for each day of the week how many bikes were rented
+number_of_casuals_onSunday<-weekday_casual %>% filter(weekday_casual$weekday == "Sun")%>%nrow()
+print(number_of_casuals_onSunday)
+##total occurrences of weekday for every trip in casual list for march2025
+weekday_counts <- weekday_casual %>%
+group_by(weekday) %>%
+summarise(count = n())
+view(weekday_counts)
+print(max(weekday_counts))
+number_of_casuals_onSunday<-weekday_casual %>% filter(weekday_casual$weekday == "Sun")%>%nrow()
+print(number_of_casuals_onSunday)
+weekday_counts <- weekday_casual %>%
+group_by(weekday, Rideable_type) %>%
+summarise(count = n())
+view(weekday_counts)
+print(max(weekday_counts))
+print(weekday_counts)
+# pivot wider to get separate totals for electric and classic bikes
+weekday_counts_casuals <- weekday_counts%>% pivot_wider(names_from = Rideable_type, values_from = count)|> mutate(electric_bike + classic_bike)
+print(weekday_counts_casuals)
+# pivot wider to get separate totals for electric and classic bikes
+weekday_counts_casuals <- weekday_counts%>% pivot_wider(names_from = Rideable_type, values_from = count)|> mutate(Total = electric_bike + classic_bike)
+print(weekday_counts_casuals)
+view(memberlist_march2025)
+total_number_members <- nrow(memberlist_march2025)
+print(total_number_members)
+weekday_members <- memberlist_march2025%>% mutate(weekday = wday(as.Date(memberlist_march2025$Started_at), label = TRUE, abbr = TRUE))
+view(weekday_members)
+number_of_members_onsunday <-weekday_members|> filter(weekday_members$weekday == "Sun")|> nrow()
+print(number_of_members_onsunday)
+number_of_members_onsunday_saturday <-weekday_members|> filter((weekday_members$weekday == "Sun") && (weekday_members$weekday == "Sat"))|> nrow()
+number_of_members_onsunday_saturday <-weekday_members|> filter((weekday_members$weekday == "Sun") & (weekday_members$weekday == "Sat"))|> nrow()
+print(number_of_members_onsunday_saturday)
+number_of_members_onsaturday <-weekday_members|> filter(weekday_members$weekday == "Sat")|> nrow()
+print(number_of_members_onsaturday)
+number_of_casuals_onSaturday<-weekday_casual %>% filter(weekday_casual$weekday == "Sat")%>%nrow()
+print(number_of_casuals_onSaturday)
+number_of_casuals_onweekends<-weekday_casual %>% filter((weekday_casual$weekday == "Sat") & (weekday_casual$weekday == "Sun"))%>%nrow()
+print(number_of_casuals_onweekends)
+library(readr, stringr)
+library(lubridate)
+library(dplyr)
+library(vroom)
+library(tidyverse)
+library(tidyr)
+library(hms)
+library(vctrs)
+X202504_divvy_tripdata <- read.csv(file.choose())
+view(X202504_divvy_tripdata)
+table(is.na(cyclistic_April2025_df$started_at))
+new_April2025_start_date <-cyclistic_April2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+start_month = month(started_at),
+start_day = day(started_at),
+start_year = year(started_at),
+start_time_minutes = hour(started_at)*60+minute(started_at)+(second(started_at)/60)
+)
+new_April2025_end_date <-cyclistic_April2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+end_month = month(ended_at),
+end_day = day(ended_at),
+end_year = year(ended_at),
+end_time = hour(ended_at)*60+minute(started_at)+(second(started_at)/60)
+)
+cyclistic_April2025_df <- data.frame(X202504_divvy_tripdata)
+view(cyclistic_April2025_df)
+table(is.na(cyclistic_April2025_df$started_at))
+table(grepl("^\\d{2}:\\d{2}:\\d{2}$", cyclistic_April2025_df$started_at))
+str(cyclistic_April2025_df$started_at)
+head(cyclistic_April2025_df$started_at)
+str(cyclistic_April2025_df$ended_at)
+head(cyclistic_April2025_df$ended_at)
+new_April2025_start_date <-cyclistic_April2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+start_month = month(started_at),
+start_day = day(started_at),
+start_year = year(started_at),
+start_time_minutes = hour(started_at)*60+minute(started_at)+(second(started_at)/60)
+)
+view(new_April2025_start_date)
+new_April2025_end_date <-cyclistic_April2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+end_month = month(ended_at),
+end_day = day(ended_at),
+end_year = year(ended_at),
+end_time = hour(ended_at)*60+minute(started_at)+(second(started_at)/60)
+)
+view(new_April2025_end_date)
+elapsed_time <- interval(ymd_hms(cyclistic_April2025_df$started_at), ymd_hms(cyclistic_April2025_df$ended_at))
+trip_duration<- as.duration(elapsed_time)
+T_D <- data.frame(trip_duration)
+#view elapsed time in dataframe
+class(T_D$trip_duration)
+view(T_D)
+merge_df <- new_April2025_start_date|>inner_join(new_April2025_end_date, by = c("ride_id", "rideable_type", "started_at", "ended_at","start_station_name","start_station_id", "end_station_name", "end_station_id", "start_lat", "start_lng", "end_lat", "end_lng", "member_casual"))
+view(merge_df)
+new_April2025_datetime <-  bind_cols(merge_df, Trip_Duration = T_D$trip_duration)
+colnames(new_April2025_datetime)<-tools::toTitleCase(colnames(new_April2025_datetime))
+view(new_April2025_datetime)
+new_April2025_datetime <- new_April2025_datetime%>%separate( Trip_Duration, into= c("seconds", "minutes"), sep = "s \\(~", remove = TRUE) %>%
+mutate(seconds = as.numeric(seconds), minutes = as.numeric(gsub("minutes\\)", "", minutes))
+)
+view(new_April2025_datetime)
+memberlist_April2025 <- new_April2025_datetime %>% filter(Member_casual == "member")
+view(memberlist_April2025)
+write_excel_csv(memberlist_April2025, "memberlist_April2025.csv", delim = ",",na = "NA",append = FALSE)
+#Seperating the casual list
+casuallist_April2025 <- new_April2025_datetime %>% filter(Member_casual == "casual")
+view(casuallist_April2025)
+write_excel_csv(casuallist_April2025, "casuallist_April2025.csv", delim = ",",na = "NA",append = FALSE)
+#export to excel csv sheet
+write_excel_csv(new_April2025_datetime, "April2025_cyclistic2025",delim = ",", na="NA", append = FALSE)
+weekday_casual <- casuallist_April2025 %>% mutate(weekday = wday(as.Date(casuallist_April2025$Started_at), label = TRUE, abbr = TRUE))
+view(weekday_casual)
+weekday_casual <- casuallist_April2025 %>% mutate(weekday = wday(as.Date(casuallist_April2025$Started_at), label = TRUE, abbr = TRUE))
+view(weekday_casual)
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday, Rideable_type)%>%summarise(count = n())
+view(rental_byweekday_biketype)
+##total rentals categorized by type of bike for each day in April for casuals
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+print(rental_byweekday_biketype_casuals_T)
+rental_byday <-weekday_casual%>%group_by(weekday)%>%summarise(Total = n())
+view(rental_byday)
+##Weekdays for the members_list starting date
+weekday_members <- memberlist_April2025 %>% mutate(weekday = wday(as.Date(memberlist_April2025$Started_at), label = TRUE, abbr = TRUE))
+view(weekday_members)
+rental_byweekday_biketype_members <- weekday_members%>% group_by(weekday, Rideable_type)%>%summarise(count = n())%>% summarise_at(group_by(weekday_members$weekday)%>%summarise(total = n()))
+rental_byday_members <- weekday_members %>% group_by(weekday)%>%summarise(total = n())
+view(rental_byday_members)
+class(rental_byday_members)
+rental_byweekday_biketype_member_T <- rental_byweekday_biketype_members%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype_members <- weekday_members%>% group_by(weekday, Rideable_type)%>%summarise(count = n())%>% summarise_at(group_by(weekday_members$weekday)%>%summarise(total = n()))
+weekday_casual <- casuallist_April2025 %>% mutate(weekday = wday(as.Date(casuallist_April2025$Started_at), label = TRUE, abbr = TRUE))
+view(weekday_casual)
+weekday_casual <- casuallist_April2025 %>% mutate(weekday = wday(as.Date(casuallist_April2025$Started_at), label = TRUE, abbr = TRUE))
+view(weekday_casual)
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday_casual, weekday, Rideable_type)%>%summarise(count = n())
+weekday_casual <- casuallist_April2025 %>% mutate(weekday = wday(as.Date(casuallist_April2025$Started_at), label = TRUE, abbr = TRUE))
+weekday_casual <- data.frame(weekday_casual)
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday_casual, weekday, Rideable_type)%>%summarise(count = n())
+view(weekday_casual)
+class(weekday_casual)
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday_casual, weekday, Rideable_type)%>%summarise(count = n())
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday_casual$weekday, weekday_casual$Rideable_type)%>%summarise(count = n())
+view(rental_byweekday_biketype)
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype <- weekday_casual%>% group_by(weekday_casual$weekday, weekday_casual$Rideable_type)%>%summarise(count = n())
+view(rental_byweekday_biketype)
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =rental_byweekday_biketype$Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+##total rentals categorized by type of bike for each day in April for casuals
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =rental_byweekday_biketype$Rideable_type, values_from=rental_byweekday_biketype$count) %>% mutate(Total = classic_bike + electric_bike)
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+library(readr, stringr)
+library(lubridate)
+library(dplyr)
+library(vroom)
+library(tidyverse)
+library(tidyr)
+library(hms)
+library(vctrs)
+view(rental_byweekday_biketype)
+rental_byweekday_biketype_casuals_T <- rental_byweekday_biketype%>% pivot_wider(names_from =Rideable_type, values_from=count) %>% mutate(Total = classic_bike + electric_bike)
+rental_with_total <- rental_byweekday_biketype_members %>%
+bind_rows(
+rental_totals_by_weekday %>%
+mutate(Rideable_type = "TOTAL") %>%
+rename(count = total)
+) %>%
+arrange(weekday, Rideable_type)
+rental_with_total <- weekday_casual %>%
+bind_rows(
+weekday_casual %>%
+mutate(Rideable_type = "TOTAL") %>%
+rename(count = total)
+) %>%
+arrange(weekday, Rideable_type)
+library(readr, stringr)
+library(lubridate)
+library(dplyr)
+library(vroom)
+library(tidyverse)
+library(tidyr)
+library(hms)
+library(vctrs)
+rental_with_total <- weekday_casual %>%
+bind_rows(
+weekday_casual %>%
+mutate(Rideable_type = "TOTAL") %>%
+rename(count = total)
+) %>%
+arrange(weekday, Rideable_type)
+rental_with_total <- weekday_casual %>%
+bind_rows(
+weekday_casual %>%
+mutate(Rideable_type = "TOTAL") %>%
+) %>%
+X202504_divvy_tripdata <- read.csv(file.choose())
+view(X202504_divvy_tripdata)
+cyclistic_April2025_df <- data.frame(X202504_divvy_tripdata)
+view(cyclistic_April2025_df)
+table(is.na(cyclistic_April2025_df$started_at))
+table(grepl("^\\d{2}:\\d{2}:\\d{2}$", cyclistic_April2025_df$started_at))
+str(cyclistic_April2025_df$started_at)
+head(cyclistic_April2025_df$started_at)
+str(cyclistic_April2025_df$ended_at)
+head(cyclistic_April2025_df$ended_at)
+new_April2025_end_date <-cyclistic_April2025_df %>% select(ride_id, rideable_type, started_at, ended_at,start_station_name,start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)%>% mutate(
+end_month = month(ended_at),
+end_day = day(ended_at),
+end_year = year(ended_at),
+end_time = hour(ended_at)*60+minute(started_at)+(second(started_at)/60)
+)
+view(new_April2025_end_date)
+elapsed_time <- interval(ymd_hms(cyclistic_April2025_df$started_at), ymd_hms(cyclistic_April2025_df$ended_at))
+trip_duration<- as.duration(elapsed_time)
+T_D <- data.frame(trip_duration)
+class(T_D$trip_duration)
+view(T_D)
+merge_df <- new_April2025_start_date|>inner_join(new_April2025_end_date, by = c("ride_id", "rideable_type", "started_at", "ended_at","start_station_name","start_station_id", "end_station_name", "end_station_id", "start_lat", "start_lng", "end_lat", "end_lng", "member_casual"))
+view(merge_df)
+new_April2025_datetime <-  bind_cols(merge_df, Trip_Duration = T_D$trip_duration)
+colnames(new_April2025_datetime)<-tools::toTitleCase(colnames(new_April2025_datetime))
+view(new_April2025_datetime)
+savehistory("C:/Users/vgp_1/OneDrive/Desktop/google_data_analysis/project1/cyclistic2025_analysisApril.rmd")
